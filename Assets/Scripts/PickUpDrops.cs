@@ -3,12 +3,12 @@ using System.Collections;
 
 public class PickUpDrops : MonoBehaviour {
 
-	private Inventory connectedInv;
+	//private Inventory connectedInv;
 	private ItemDatabase itemDatabase;
 
 	private void Start()
 	{
-		connectedInv = transform.parent.GetComponent<Inventory>();
+		//connectedInv = transform.parent.GetComponent<Inventory>();
 		itemDatabase = GameObject.Find("GameManager").GetComponent<ItemDatabase>();
 	}
 
@@ -16,7 +16,7 @@ public class PickUpDrops : MonoBehaviour {
 	{
 		if(other.gameObject.layer == 9)
 		{
-			connectedInv.AddItem(other.name, 1);
+			//connectedInv.AddItem(other.name, 1);
 			GameObject.Destroy(other.gameObject);
 		}
 	}
