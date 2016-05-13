@@ -8,15 +8,20 @@ public class Player : MonoBehaviour {
 	public float moveSpeed = 3f;
 	public float jumpForce = 250f;
 
+	public LayerMask groundLayer;
+	public float groundCheckDistance = 0.07f;
+
 	private Rigidbody2D rbody;
 	private Animator anim;
 	private GUIManager guiManager;
+	private Transform groundCheck;
 
 	private void Start()
 	{
 		rbody = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator>();
 		guiManager = GameObject.Find("GUI").GetComponent<GUIManager>();
+		groundCheck = transform.FindChild("GroundCheck");
 	}
 
 	private void Update()
@@ -26,6 +31,12 @@ public class Player : MonoBehaviour {
 		UpdateMovemenet();
 
 		UpdateBreaking();
+	}
+
+	private bool IsGrounded()
+	{
+		RaycastHit2D hit = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
+		return hit.collider != null;
 	}
 
 	private void UpdateControls()
@@ -48,7 +59,7 @@ public class Player : MonoBehaviour {
 		}
 
 		//Jump Controls
-		if(Input.GetKeyDown(jumpKey))
+		if(Input.GetKeyDown(jumpKey) && IsGrounded())
 		{
 			Jump();
 		}
