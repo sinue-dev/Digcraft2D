@@ -69,3 +69,5 @@ Build/*
 # http://stackoverflow.com/questions/1022111/what-are-monodevelops-pidb-files
 *.pidb
 *.userprefs
+*.suo
+Library/metadata/15/15f59a38a0062ca4d9bb5c29cb4ac26d
