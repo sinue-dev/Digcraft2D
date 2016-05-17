@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour {
 
     public int slotCount = 3 * 9;
-    public List<ItemStack> itemStacks;
+    public ItemStack[] itemStacks;
 
     private ItemDatabase itemDatabase;
 
     private void Start()
     {
         itemDatabase = GameObject.Find("GameManager").GetComponent<ItemDatabase>();
-        itemStacks = new List<ItemStack>();
+        itemStacks = new ItemStack[slotCount];
+        itemStacks[4] = new ItemStack(itemDatabase.FindItem("Dirt"), 64);
     }
 
     public void AddItem(string sName, int iCount)
@@ -25,9 +25,11 @@ public class Inventory : MonoBehaviour {
         }
         else
         {
-            if(itemStacks.Count < slotCount)
+            if(FindFirstAvailableSlot() >= 0)
             {
-                itemStacks.Add(new ItemStack(itemDatabase.FindItem(sName), iCount));
+                int availableSlot = FindFirstAvailableSlot();
+                itemStacks[availableSlot] = new ItemStack(itemDatabase.FindItem(name), iCount);
+                //itemStacks.Add(, iCount));
             }
             else
             {
@@ -48,7 +50,7 @@ public class Inventory : MonoBehaviour {
             }
             else
             {
-                itemStacks.Remove(existingStack);
+                existingStack = null;
             }
         }
     }
@@ -63,6 +65,18 @@ public class Inventory : MonoBehaviour {
             }
         }
         return null;
+    }
+
+    private int FindFirstAvailableSlot()
+    {
+        for(int i = 0; i < itemStacks.Length;i++)
+        {
+            if(itemStacks[i] == null)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private ItemStack FindExistingStack(string sName, int iCount)

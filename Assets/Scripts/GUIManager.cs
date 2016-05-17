@@ -5,19 +5,68 @@ using UnityEngine.UI;
 public class GUIManager : MonoBehaviour {
 
 	public Image playerInventory;
+
+    private Inventory playerInventoryScript;
+
 	public bool bShowPlayerInventory = false;
 
     public Image[] slots;
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(1))
+        if(playerInventoryScript == null)
         {
-            for(int i=0; i< slots.Length; i++)
+            playerInventoryScript = GameObject.FindWithTag("Player").GetComponent<Inventory>();
+        }
+
+        if (bShowPlayerInventory)
+        {
+            if (Input.GetMouseButtonDown(1))
             {
-                if (IsMouseOverSlot(i))
+                for (int i = 0; i < slots.Length; i++)
                 {
-                    Debug.Log("Clicked mouse over slot" + i);
+                    if (IsMouseOverSlot(i))
+                    {
+                        if (playerInventoryScript.itemStacks[i] != null)
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }
+            }
+
+            RenderSltos();
+        }
+    }
+
+    private void RenderSltos()
+    {
+        for(int i = 0; i < slots.Length; i++)
+        {
+            ItemStack itemStack = playerInventoryScript.itemStacks[i];
+
+            if(itemStack != null)
+            {
+                if(slots[i].color.a != 1)
+                {
+                    slots[i].color = new Color(1, 1, 1, 1);
+                    slots[i].sprite = itemStack.item.sprite;
+
+                    slots[i].transform.GetChild(0).GetComponent<Text>().text = itemStack.stackSize.ToString();
+                }                
+            }
+            else
+            {
+                if (slots[i].color.a != 0)
+                {
+                    slots[i].color = new Color(1, 1, 1, 0);
+                    slots[i].sprite = null;
+
+                    slots[i].transform.GetChild(0).GetComponent<Text>().text = string.Empty;
                 }
             }
         }
