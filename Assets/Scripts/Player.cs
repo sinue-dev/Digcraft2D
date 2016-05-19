@@ -11,13 +11,16 @@ public class Player : MonoBehaviour {
 	public LayerMask groundLayer;
 	public float groundCheckDistance = 0.07f;
 
+	public SpriteRenderer handSlotFront;
+	public SpriteRenderer handSlotSide;
+
 	private Rigidbody2D rbody;
 	private Animator anim;
 	private GUIManager guiManager;
 	private Transform groundCheck;
-
-	public SpriteRenderer handSlotFront;
-	public SpriteRenderer handSlotSide;
+	private Hotbar hotbar;
+	private BlockManager blockManager;
+	private WorldGen worldGen;
 
 	private void Start()
 	{
@@ -25,6 +28,9 @@ public class Player : MonoBehaviour {
 		anim = GetComponent<Animator>();
 		guiManager = GameObject.Find("GUI").GetComponent<GUIManager>();
 		groundCheck = transform.FindChild("GroundCheck");
+		hotbar = GameObject.Find("Hotbar").GetComponent<Hotbar>();
+		blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
+		worldGen = GameObject.Find("World").GetComponent<WorldGen>();
 	}
 
 	private void Update()
@@ -34,6 +40,8 @@ public class Player : MonoBehaviour {
 		UpdateMovemenet();
 
 		UpdateBreaking();
+
+		UpdatePlacing();
 	}
 
 	private bool IsGrounded()
@@ -119,6 +127,30 @@ public class Player : MonoBehaviour {
 				if(hit.collider.gameObject.tag == "Block")
 				{
 					GameObject.Find("World").GetComponent<WorldGen>().DestroyBlock(hit.collider.gameObject);
+				}
+			}
+		}
+	}
+
+	private void UpdatePlacing()
+	{
+		if (Input.GetMouseButtonDown(1)) // RIGHT MOUSE
+		{
+			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			RaycastHit2D hit = Physics2D.Raycast(pos, transform.position);
+			if (hit.collider == null)
+			{
+				Item item = hotbar.GetHeldItem();
+
+				if (item == null) return;
+
+				switch(item.type)
+				{
+					case Item.Type.BLOCK:
+
+						Block block = blockManager.FindBlock(item.itemName);
+						worldGen.PlaceBlock(block, pos);
+						break;
 				}
 			}
 		}

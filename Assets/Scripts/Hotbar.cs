@@ -65,4 +65,15 @@ public class Hotbar : MonoBehaviour {
 			}
 		}
 	}
+
+	public Item GetHeldItem()
+	{
+		int selSlot = 10 - selectedSlot;
+
+		if(playerInv.itemStacks[selSlot +26] != null)
+		{
+			return playerInv.itemStacks[selSlot + 26].item;
+		}
+		return null;
+	}
 }

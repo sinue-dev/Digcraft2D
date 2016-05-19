@@ -23,4 +23,13 @@ public class BlockManager : MonoBehaviour {
 		return null;
 	}
 
+	public Block FindBlock(string name)
+	{
+		foreach (Block block in blocks)
+		{
+			if (block.sDisplayName == name) return block;
+		}
+
+		return null;
+	}
 }

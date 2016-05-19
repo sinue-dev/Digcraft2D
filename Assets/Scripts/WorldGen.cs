@@ -92,6 +92,38 @@ public class WorldGen : MonoBehaviour {
 		}
 	}
 
+	public void UpdateChunk(Chunk chunk)
+	{
+		for(int x = 0; x < Chunk.size; x++)
+		{
+			for(int y = 0; y < height; y++)
+			{
+				if(chunk.blocks[x,y] != null && chunk.blockObjects[x,y] == null)
+				{
+					GameObject goBlock = new GameObject();
+					SpriteRenderer sr = goBlock.AddComponent<SpriteRenderer>();
+					sr.sprite = chunk.blocks[x, y].sprite;
+
+					goBlock.name = chunk.blocks[x, y].sDisplayName + "[" + x + "," + y + "]";
+					goBlock.transform.position = new Vector3((chunk.position * Chunk.size) + x, y);
+					goBlock.tag = "Block";
+
+					chunk.blockObjects[x, y] = goBlock;
+
+					if (chunk.blocks[x, y].isSolid)
+					{
+						BoxCollider2D bc = goBlock.AddComponent<BoxCollider2D>();
+					}
+				}
+				else if(chunk.blocks[x, y] == null && chunk.blockObjects[x, y] != null)
+				{
+					GameObject.Destroy(chunk.blockObjects[x, y]);
+					chunk.blockObjects[x, y] = null;
+				}
+			}
+		}
+	}
+
 	public void DestroyBlock(GameObject block)
 	{
 		Vector3 blockPos = block.transform.position;
@@ -122,6 +154,16 @@ public class WorldGen : MonoBehaviour {
 		chunk.blocks[x, y] = blockManager.FindBlock(0);
 
 		GameObject.Destroy(block);
+	}
+
+	public void PlaceBlock(Block block, Vector3 pos)
+	{
+		Chunk chunk = ChunkAtPos(pos.x);
+		Vector2 chunkPos = WorldPosToChunkPos(pos.x, pos.y);
+
+		chunk.blocks[(int)chunkPos.x, (int)chunkPos.y] = block;
+
+		UpdateChunk(chunk);
 	}
 
 	private Chunk ChunkAtPos(float x)
