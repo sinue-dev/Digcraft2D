@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 2a200cdb269ecdd45bade2a5a89cb7f3
-timeCreated: 1463036364
+timeCreated: 1463642891
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: widgets_0
+    21300002: widgets_1
+    21300004: widgets_2
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -61,6 +63,26 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 3, y: 5, z: 3, w: 3}
+    - name: widgets_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 470
+        width: 360
+        height: 40
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: widgets_2
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 422
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
   assetBundleName: 
