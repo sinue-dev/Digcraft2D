@@ -16,6 +16,9 @@ public class Player : MonoBehaviour {
 	private GUIManager guiManager;
 	private Transform groundCheck;
 
+	public SpriteRenderer handSlotFront;
+	public SpriteRenderer handSlotSide;
+
 	private void Start()
 	{
 		rbody = GetComponent<Rigidbody2D>();
@@ -118,6 +121,18 @@ public class Player : MonoBehaviour {
 					GameObject.Find("World").GetComponent<WorldGen>().DestroyBlock(hit.collider.gameObject);
 				}
 			}
+		}
+	}
+
+	public void HoldItem(Sprite sprite)
+	{
+		if(direction == 0)
+		{
+			handSlotFront.sprite = sprite;
+		}
+		else
+		{
+			handSlotSide.sprite = sprite;
 		}
 	}
 
