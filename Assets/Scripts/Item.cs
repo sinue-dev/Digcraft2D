@@ -7,6 +7,18 @@ public class Item {
     public string itemName;
     public Sprite sprite;
     public int iMaxStack = 64;
+
+	public enum Type
+	{
+		ITEM,
+		BLOCK,
+		WEAPON,
+		ARMOR,
+		TOOL,
+		FOOD
+	}
+
+	public Type type;
 }
 
 public class ItemStack
