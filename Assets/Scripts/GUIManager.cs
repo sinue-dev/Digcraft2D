@@ -18,6 +18,8 @@ public class GUIManager : MonoBehaviour
 
 	public Image[] slots;
 
+	public Image greyOut;
+
 	private void Start()
 	{
 		cursorIcon = GameObject.Instantiate(slotPrefab, Vector3.zero, Quaternion.identity) as GameObject;
@@ -84,23 +86,17 @@ public class GUIManager : MonoBehaviour
 
 			if (itemStack != null)
 			{
-				if (slots[i].color.a != 1)
-				{
-					slots[i].color = new Color(1, 1, 1, 1);
-					slots[i].sprite = itemStack.item.sprite;
+				slots[i].color = new Color(1, 1, 1, 1);
+				slots[i].sprite = itemStack.item.sprite;
 
-					slots[i].transform.GetChild(0).GetComponent<Text>().text = itemStack.stackSize.ToString();
-				}
+				slots[i].transform.GetChild(0).GetComponent<Text>().text = itemStack.stackSize.ToString();
 			}
 			else
 			{
-				if (slots[i].color.a != 0)
-				{
-					slots[i].color = new Color(1, 1, 1, 0);
-					slots[i].sprite = null;
+				slots[i].color = new Color(1, 1, 1, 0);
+				slots[i].sprite = null;
 
-					slots[i].transform.GetChild(0).GetComponent<Text>().text = string.Empty;
-				}
+				slots[i].transform.GetChild(0).GetComponent<Text>().text = string.Empty;
 			}
 		}
 	}
@@ -131,6 +127,8 @@ public class GUIManager : MonoBehaviour
 
 	public void ShowPlayerInventory(bool value)
 	{
+		greyOut.color = value ? new Color(0, 0, 0, 0.75f) : new Color(0, 0, 0, 0);
+
 		playerInventory.gameObject.SetActive(value);
 		bShowPlayerInventory = value;
 	}
