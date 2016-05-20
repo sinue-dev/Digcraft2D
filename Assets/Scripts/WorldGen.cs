@@ -76,6 +76,7 @@ public class WorldGen : MonoBehaviour {
 					GameObject goBlock = new GameObject();
 					SpriteRenderer sr = goBlock.AddComponent<SpriteRenderer>();
 					sr.sprite = chunk.blocks[x, y].sprite;
+					sr.material = Resources.Load("SpriteMaterial") as Material;
 
 					goBlock.name = chunk.blocks[x, y].sDisplayName + "[" + x + "," + y + "]";
 					goBlock.transform.position = new Vector3((chunk.position * Chunk.size) + x, y);
@@ -103,6 +104,7 @@ public class WorldGen : MonoBehaviour {
 					GameObject goBlock = new GameObject();
 					SpriteRenderer sr = goBlock.AddComponent<SpriteRenderer>();
 					sr.sprite = chunk.blocks[x, y].sprite;
+					sr.material = Resources.Load("SpriteMaterial") as Material;
 
 					goBlock.name = chunk.blocks[x, y].sDisplayName + "[" + x + "," + y + "]";
 					goBlock.transform.position = new Vector3((chunk.position * Chunk.size) + x, y);
@@ -141,7 +143,11 @@ public class WorldGen : MonoBehaviour {
 				GameObject dropObject = new GameObject();
 				dropObject.transform.position = block.transform.position;
 				dropObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-				dropObject.AddComponent<SpriteRenderer>().sprite = itemDatabase.FindItem(drop.ItemName).sprite;
+
+				SpriteRenderer sr = dropObject.AddComponent<SpriteRenderer>();
+				sr.sprite = itemDatabase.FindItem(drop.ItemName).sprite;
+				sr.material = sr.material = Resources.Load("SpriteMaterial") as Material;
+
 				dropObject.AddComponent<PolygonCollider2D>();
 				dropObject.AddComponent<Rigidbody2D>();
 				dropObject.layer = 9;
@@ -192,6 +198,14 @@ public class WorldGen : MonoBehaviour {
 	{
 		int xPos = Mathf.FloorToInt(x + (chunkPos * Chunk.size));
 		int yPos = Mathf.FloorToInt(y);
+
+		return new Vector2(xPos, yPos);
+	}
+
+	public Vector2 WorldPosToGridPos(float x, float y)
+	{
+		int xPos = Mathf.RoundToInt(x);
+		int yPos = Mathf.RoundToInt(y);
 
 		return new Vector2(xPos, yPos);
 	}

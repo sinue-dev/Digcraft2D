@@ -77,6 +77,8 @@
     <Compile Include="Assets\Scripts\Block.cs" />
     <Compile Include="Assets\Scripts\BlockManager.cs" />
     <Compile Include="Assets\Scripts\Chunk.cs" />
+    <Compile Include="Assets\Scripts\CursorHover.cs" />
+    <Compile Include="Assets\Scripts\DayNightController.cs" />
     <Compile Include="Assets\Scripts\Drop.cs" />
     <Compile Include="Assets\Scripts\GUIManager.cs" />
     <Compile Include="Assets\Scripts\Hotbar.cs" />

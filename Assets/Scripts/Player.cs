@@ -120,10 +120,11 @@ public class Player : MonoBehaviour {
 		if(Input.GetMouseButtonDown(0))
 		{
 			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			RaycastHit2D hit = Physics2D.Raycast(pos, transform.position);
+			RaycastHit2D hit = Physics2D.Raycast(pos, pos, Mathf.Infinity);
 			if(hit.collider != null)
 			{
-				Debug.Log(hit.collider.gameObject.name);
+				Debug.DrawLine(pos, hit.point, Color.green);
+				Debug.Log("HIT: " + hit.collider.gameObject.name);
 				if(hit.collider.gameObject.tag == "Block")
 				{
 					GameObject.Find("World").GetComponent<WorldGen>().DestroyBlock(hit.collider.gameObject);
@@ -144,13 +145,10 @@ public class Player : MonoBehaviour {
 
 				if (item == null) return;
 
-				switch(item.type)
+				if(item.type == Item.ItemType_e.BLOCK)
 				{
-					case Item.Type.BLOCK:
-
-						Block block = blockManager.FindBlock(item.itemName);
-						worldGen.PlaceBlock(block, pos);
-						break;
+					Block block = blockManager.FindBlock(item.itemName);
+					worldGen.PlaceBlock(block, pos);
 				}
 			}
 		}

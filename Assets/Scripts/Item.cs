@@ -8,7 +8,7 @@ public class Item {
     public Sprite sprite;
     public int iMaxStack = 64;
 
-	public enum Type
+	public enum ItemType_e
 	{
 		ITEM,
 		BLOCK,
@@ -18,7 +18,7 @@ public class Item {
 		FOOD
 	}
 
-	public Type type;
+	public ItemType_e type;
 }
 
 public class ItemStack
