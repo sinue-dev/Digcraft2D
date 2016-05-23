@@ -10,9 +10,9 @@ public class Chunk {
 	public GameObject[,] blockObjects;
 	private BlockManager blockManager;
 
-	public Chunk(BlockManager blockManager, int position)
+	public Chunk(int position)
 	{
-		this.blockManager = blockManager;
+		this.blockManager = BlockManager.I;
 		this.position = position;
 		blocks = new Block[size,WorldGen.height];
 		blockObjects = new GameObject[size, WorldGen.height];

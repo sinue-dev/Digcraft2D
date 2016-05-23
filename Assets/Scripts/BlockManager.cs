@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BlockManager : MonoBehaviour {
+public class BlockManager : Singleton<BlockManager> {
 
 	public List<Block> blocks;
+
+	protected BlockManager() { }
 
 	private void Start()
 	{

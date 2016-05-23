@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ItemDatabase : MonoBehaviour {
+public class ItemDatabase : Singleton<ItemDatabase> {
 
     public List<Item> items;
 
