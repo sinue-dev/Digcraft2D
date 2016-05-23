@@ -26,10 +26,10 @@ public class Player : MonoBehaviour {
 	{
 		rbody = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator>();
-		guiManager = GameObject.Find("GUI").GetComponent<GUIManager>();
+		guiManager = GUIManager.I;
 		groundCheck = transform.FindChild("GroundCheck");
 		hotbar = GameObject.Find("Hotbar").GetComponent<Hotbar>();
-		blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
+		blockManager = BlockManager.I;
 		worldGen = GameObject.Find("World").GetComponent<WorldGen>();
 	}
 

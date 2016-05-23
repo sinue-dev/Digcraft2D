@@ -10,7 +10,7 @@ public class Inventory : MonoBehaviour {
 
     private void Start()
     {
-        itemDatabase = GameObject.Find("GameManager").GetComponent<ItemDatabase>();
+		itemDatabase = ItemDatabase.I;
         itemStacks = new ItemStack[slotCount];
         itemStacks[4] = new ItemStack(itemDatabase.FindItem("Dirt"), 64);
     }

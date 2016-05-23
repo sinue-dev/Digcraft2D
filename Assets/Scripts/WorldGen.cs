@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class WorldGen : MonoBehaviour {
+public class WorldGen : Singleton<WorldGen> {
 
 	public GameObject player;
 
@@ -17,9 +17,9 @@ public class WorldGen : MonoBehaviour {
 
 	void Start ()
 	{
-		blockManager = GameObject.Find("GameManager").GetComponent<BlockManager>();
+		blockManager = BlockManager.I;
 
-		itemDatabase = GameObject.Find("GameManager").GetComponent<ItemDatabase>();
+		itemDatabase = ItemDatabase.I;
 
 		chunks = new List<Chunk>();
 
@@ -46,7 +46,7 @@ public class WorldGen : MonoBehaviour {
 			if (spawn)
 			{
 				//Spawn Chunk
-				Chunk newChunk = new Chunk(blockManager, i);
+				Chunk newChunk = new Chunk(i);
 				newChunk.GenerateBlocks();
 				SpawnBlocks(newChunk);
 				chunks.Add(newChunk);

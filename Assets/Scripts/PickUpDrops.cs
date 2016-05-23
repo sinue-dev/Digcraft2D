@@ -9,7 +9,7 @@ public class PickUpDrops : MonoBehaviour {
 	private void Start()
 	{
 		//connectedInv = transform.parent.GetComponent<Inventory>();
-		itemDatabase = GameObject.Find("GameManager").GetComponent<ItemDatabase>();
+		itemDatabase = ItemDatabase.I;
 	}
 
 	private void OnTriggerEnter2D(Collider2D other)
