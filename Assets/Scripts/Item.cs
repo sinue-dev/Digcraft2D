@@ -19,6 +19,16 @@ public class Item {
 	}
 
 	public ItemType_e type;
+
+	public Item() { }
+
+	public Item(Item preset)
+	{
+		this.itemName = preset.itemName;
+		this.sprite = preset.sprite;
+		this.iMaxStack = preset.iMaxStack;
+		this.type = preset.type;
+	}
 }
 
 public class ItemStack
