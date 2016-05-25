@@ -8,14 +8,26 @@ public class Chunk {
 	public int position;
 	public Block[,] blocks;
 	public GameObject[,] blockObjects;
-	private BlockManager blockManager;
+
+	public ChunkState_e chunkState = ChunkState_e.DESPAWNED;
+
+	public enum ChunkState_e
+	{
+		SPAWNED,
+		DESPAWNED
+	}
+
+	//public GameObject[,] blockObjects
+	//{
+	//	get { return _blockObjects; }
+	//	set { _blockObjects = value; }
+	//}
 
 	public Chunk(int position)
 	{
-		this.blockManager = BlockManager.I;
 		this.position = position;
-		blocks = new Block[size,WorldGen.height];
-		blockObjects = new GameObject[size, WorldGen.height];
+		blocks = new Block[size, WorldManager.height];
+		blockObjects = new GameObject[size, WorldManager.height];
 	}
 
 	public void GenerateBlocks()
@@ -25,7 +37,7 @@ public class Chunk {
 			float pValue = Mathf.PerlinNoise((position * size + x) * 0.05f, 5 * 0.05f);
 			int pHeight = Mathf.RoundToInt(pValue * 10f + heightModifier);
 
-			for (int y = 0; y < WorldGen.height; y++)
+			for (int y = 0; y < WorldManager.height; y++)
 			{
 				if (y <= pHeight)
 				{
@@ -33,25 +45,25 @@ public class Chunk {
 					{
 						if (Random.value < 0.1)
 						{
-							blocks[x, y] = blockManager.FindBlock(4);
+							blocks[x, y] = BlockManager.I.FindBlock(4);
 						}
 					}
 					else if (y == pHeight - 1) // Grass Layer
 					{
-						blocks[x, y] = blockManager.FindBlock(1);
+						blocks[x, y] = BlockManager.I.FindBlock(1);
 					}
 					else if (y == pHeight - 2 || y == pHeight - 3 || y == pHeight - 4) // Dirt Layers
 					{
-						blocks[x, y] = blockManager.FindBlock(3);
+						blocks[x, y] = BlockManager.I.FindBlock(3);
 					}
 					else // Stone Layers
 					{
-						blocks[x, y] = blockManager.FindBlock(2);
+						blocks[x, y] = BlockManager.I.FindBlock(2);
 					}
 				}
 				else
 				{
-					blocks[x, y] = blockManager.FindBlock(0);
+					blocks[x, y] = BlockManager.I.FindBlock(0);
 				}
 			}
 		}
@@ -61,7 +73,7 @@ public class Chunk {
 	{
 		for(int x = 0; x < size; x++)
 		{
-			for(int y = 0; y < WorldGen.height; y++)
+			for(int y = 0; y < WorldManager.height; y++)
 			{
 				blocks[x, y] = null;
 				GameObject.Destroy(blockObjects[x, y]);
@@ -69,4 +81,36 @@ public class Chunk {
 		}
 	}
 
+	public int CountBlockObjects()
+	{
+		int i = 0;
+		for (int x = 0; x < size; x++)
+		{
+			for (int y = 0; y < WorldManager.height; y++)
+			{
+				if (blockObjects[x, y] != null) i++;
+			}
+		}
+		return i;
+	}
+
+	public cChunk Serializable()
+	{
+		return new cChunk(position, WorldManager.I.SerializableBlocks(blocks));
+	}
+}
+
+[System.Serializable]
+public class cChunk
+{
+	public static int size = 16;
+	private static float heightModifier = 20f;
+	public int position;
+	public cBlock[,] blocks;
+
+	public cChunk(int position, cBlock[,] blocks)
+	{
+		this.position = position;
+		this.blocks = blocks;
+	}
 }

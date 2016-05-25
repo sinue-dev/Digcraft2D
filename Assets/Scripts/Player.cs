@@ -16,21 +16,13 @@ public class Player : MonoBehaviour {
 
 	private Rigidbody2D rbody;
 	private Animator anim;
-	private GUIManager guiManager;
 	private Transform groundCheck;
-	private Hotbar hotbar;
-	private BlockManager blockManager;
-	private WorldGen worldGen;
 
 	private void Start()
 	{
 		rbody = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator>();
-		guiManager = GUIManager.I;
 		groundCheck = transform.FindChild("GroundCheck");
-		hotbar = GameObject.Find("Hotbar").GetComponent<Hotbar>();
-		blockManager = BlockManager.I;
-		worldGen = GameObject.Find("World").GetComponent<WorldGen>();
 	}
 
 	private void Update()
@@ -78,13 +70,13 @@ public class Player : MonoBehaviour {
 		//Inventory Controls
 		if(Input.GetKeyDown(KeyCode.E))
 		{
-			if(guiManager.bShowPlayerInventory)
+			if(GUIManager.I.bShowPlayerInventory)
 			{
-				guiManager.ShowPlayerInventory(false);
+				GUIManager.I.ShowPlayerInventory(false);
 			}
 			else
 			{
-				guiManager.ShowPlayerInventory(true);
+				GUIManager.I.ShowPlayerInventory(true);
 			}
 		}
 	}
@@ -119,15 +111,16 @@ public class Player : MonoBehaviour {
 	{
 		if(Input.GetMouseButtonDown(0))
 		{
-			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			RaycastHit2D hit = Physics2D.Raycast(pos, pos, Mathf.Infinity);
-			if(hit.collider != null)
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+
+			if (hit.collider != null)
 			{
-				Debug.DrawLine(pos, hit.point, Color.green);
+				Debug.DrawLine(ray.origin, hit.point, Color.green);
 				Debug.Log("HIT: " + hit.collider.gameObject.name);
 				if(hit.collider.gameObject.tag == "Block")
 				{
-					GameObject.Find("World").GetComponent<WorldGen>().DestroyBlock(hit.collider.gameObject);
+					WorldManager.I.DestroyBlock(hit.collider.gameObject);
 				}
 			}
 		}
@@ -137,18 +130,18 @@ public class Player : MonoBehaviour {
 	{
 		if (Input.GetMouseButtonDown(1)) // RIGHT MOUSE
 		{
-			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			RaycastHit2D hit = Physics2D.Raycast(pos, transform.position);
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 			if (hit.collider == null)
 			{
-				Item item = hotbar.GetHeldItem();
+				Item item = GUIManager.I.hotbar.GetHeldItem();
 
 				if (item == null) return;
 
 				if(item.type == Item.ItemType_e.BLOCK)
 				{
-					Block block = blockManager.FindBlock(item.itemName);
-					worldGen.PlaceBlock(block, pos);
+					Block block = BlockManager.I.FindBlock(item.itemName);
+					WorldManager.I.PlaceBlock(block, ray.origin);
 				}
 			}
 		}
@@ -169,5 +162,21 @@ public class Player : MonoBehaviour {
 	private void Jump()
 	{
 		rbody.AddForce(transform.up * jumpForce);
+	}
+}
+
+[System.Serializable]
+public class cPlayer
+{
+	public float PositionX, PositionY, PositionZ;
+	public int direction;
+
+	public cPlayer() { }
+
+	public cPlayer(float PositionX, float PositionY, int direction)
+	{
+		this.PositionX = PositionX;
+		this.PositionY = PositionY;
+		this.direction = direction;
 	}
 }

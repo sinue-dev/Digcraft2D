@@ -14,6 +14,8 @@ public class GUIManager : Singleton<GUIManager>
 	private ItemStack cursorStack;
 	private GameObject cursorIcon;
 
+	public Hotbar hotbar;
+
 	public bool bShowPlayerInventory = false;
 
 	public Image[] slots;
@@ -24,6 +26,8 @@ public class GUIManager : Singleton<GUIManager>
 	{
 		cursorIcon = GameObject.Instantiate(slotPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 		cursorIcon.transform.SetParent(gameObject.transform);
+
+		hotbar = GameObject.Find("Hotbar").GetComponent<Hotbar>();
 	}
 
 	private void Update()

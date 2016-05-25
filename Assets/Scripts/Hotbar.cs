@@ -49,7 +49,7 @@ public class Hotbar : MonoBehaviour {
 		for(int i = 0; i < 9; i++)
 		{
 			Image hotbarSlot = slots[8 - i];
-			ItemStack invSlot = playerInv.itemStacks[i + 27];
+			ItemStack invSlot = (playerInv != null) ? playerInv.itemStacks[i + 27] : null;
 
 			if(invSlot != null)
 			{

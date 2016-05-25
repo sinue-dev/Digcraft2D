@@ -2,43 +2,42 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class WorldGen : Singleton<WorldGen> {
-
-	public GameObject player;
-
-	private BlockManager blockManager;
-
-	private ItemDatabase itemDatabase;
+public class WorldManager : Singleton<WorldManager> {
 
 	public static int height = 128;
 	public int viewDistance = 4;
 
-	private List<Chunk> chunks;
+	public GameObject playerPrefab; // Player Prefab
+	public GameObject player;
+
+	public List<Chunk> chunks;
 
 	void Start ()
 	{
-		blockManager = BlockManager.I;
-
-		itemDatabase = ItemDatabase.I;
-
 		chunks = new List<Chunk>();
 
-		player = SpawnPlayer(7, 65);
+		SaveLoadManager.I.LoadSaveGame();
+		//SpawnPlayer(7, 65, 0);
 	}
 
 	void Update()
 	{
+		if (player == null) return;
+
 		int playerChunk = Mathf.FloorToInt(player.transform.position.x / 16);
 
 		// Spawn new chunks
 		for (int i = playerChunk - viewDistance; i < playerChunk + viewDistance; i++)
 		{
 			bool spawn = true;
-
 			foreach (Chunk chunk in chunks)
 			{
 				if (chunk.position == i)
 				{
+					if (chunk.chunkState == Chunk.ChunkState_e.DESPAWNED)
+					{
+						SpawnBlocks(chunk);
+					}
 					spawn = false;
 				}
 			}
@@ -49,7 +48,7 @@ public class WorldGen : Singleton<WorldGen> {
 				Chunk newChunk = new Chunk(i);
 				newChunk.GenerateBlocks();
 				SpawnBlocks(newChunk);
-				chunks.Add(newChunk);
+				chunks.Add(newChunk);		
 			}
 		}
 
@@ -58,12 +57,48 @@ public class WorldGen : Singleton<WorldGen> {
 		{
 			if (chunk.position < playerChunk - viewDistance || chunk.position > playerChunk + viewDistance)
 			{
-				chunk.Destroy();
-				chunks.Remove(chunk);
-				break;
+				if(chunk.chunkState == Chunk.ChunkState_e.SPAWNED) DespawnBlocks(chunk);
 			}
 		}
 	}
+
+	public void PopulateLoadedChunks(List<cChunk> chunks_IN)
+	{
+		// Clean all old chunks
+		foreach (Chunk chunk in chunks)
+		{
+			chunk.Destroy();
+			chunks.Remove(chunk);
+		}
+
+		foreach (cChunk _chunk in chunks_IN)
+		{
+			Chunk newChunk = new Chunk(_chunk.position);
+			Block[,] newBlocks = new Block[Chunk.size, height];
+
+			for (int x = 0; x < Chunk.size; x++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+					if (_chunk.blocks[x, y] != null)
+					{
+						newBlocks[x, y] = new Block();
+						newBlocks[x, y].DisplayName = _chunk.blocks[x, y].DisplayName;
+						newBlocks[x, y].id = _chunk.blocks[x, y].id;
+						newBlocks[x, y].isSolid = _chunk.blocks[x, y].isSolid;
+						newBlocks[x, y].sprite = BlockManager.I.FindBlock(_chunk.blocks[x, y].id).sprite;
+						newBlocks[x, y].drops = _chunk.blocks[x, y].drops;
+					}
+					else newBlocks[x, y] = null;
+				}
+			}
+			newChunk.blocks = newBlocks;
+			SpawnBlocks(newChunk);
+
+			chunks.Add(newChunk);
+		}
+	}
+
 
 	private void SpawnBlocks(Chunk chunk)
 	{
@@ -75,12 +110,13 @@ public class WorldGen : Singleton<WorldGen> {
 				{
 					GameObject goBlock = new GameObject();
 					SpriteRenderer sr = goBlock.AddComponent<SpriteRenderer>();
-					sr.sprite = chunk.blocks[x, y].sprite;
-					sr.material = Resources.Load("SpriteMaterial") as Material;
+					sr.sprite = BlockManager.I.FindBlock(chunk.blocks[x, y].id).sprite;
+					sr.material = Resources.Load("Materials/SpriteMaterial") as Material;
 
-					goBlock.name = chunk.blocks[x, y].sDisplayName + "[" + x + "," + y + "]";
+					goBlock.name = chunk.blocks[x, y].DisplayName + "[" + x + "," + y + "]";
 					goBlock.transform.position = new Vector3((chunk.position * Chunk.size) + x, y);
 					goBlock.tag = "Block";
+					goBlock.transform.SetParent(transform);
 
 					chunk.blockObjects[x, y] = goBlock;
 
@@ -91,6 +127,25 @@ public class WorldGen : Singleton<WorldGen> {
 				}
 			}
 		}
+
+		chunk.chunkState = Chunk.ChunkState_e.SPAWNED;
+	}
+
+	private void DespawnBlocks(Chunk chunk)
+	{
+		for (int x = 0; x < Chunk.size; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				if (chunk.blocks[x, y] != null)
+				{
+					GameObject.Destroy(chunk.blockObjects[x, y]);
+					chunk.blockObjects[x, y] = null;
+				}
+			}
+		}
+
+		chunk.chunkState = Chunk.ChunkState_e.DESPAWNED;
 	}
 
 	public void UpdateChunk(Chunk chunk)
@@ -103,12 +158,13 @@ public class WorldGen : Singleton<WorldGen> {
 				{
 					GameObject goBlock = new GameObject();
 					SpriteRenderer sr = goBlock.AddComponent<SpriteRenderer>();
-					sr.sprite = chunk.blocks[x, y].sprite;
-					sr.material = Resources.Load("SpriteMaterial") as Material;
+					sr.sprite = BlockManager.I.FindBlock(chunk.blocks[x, y].id).sprite;
+					sr.material = Resources.Load("Materials/SpriteMaterial") as Material;
 
-					goBlock.name = chunk.blocks[x, y].sDisplayName + "[" + x + "," + y + "]";
+					goBlock.name = chunk.blocks[x, y].DisplayName + "[" + x + "," + y + "]";
 					goBlock.transform.position = new Vector3((chunk.position * Chunk.size) + x, y);
 					goBlock.tag = "Block";
+					goBlock.transform.SetParent(transform);
 
 					chunk.blockObjects[x, y] = goBlock;
 
@@ -145,8 +201,9 @@ public class WorldGen : Singleton<WorldGen> {
 				dropObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
 				SpriteRenderer sr = dropObject.AddComponent<SpriteRenderer>();
-				sr.sprite = itemDatabase.FindItem(drop.ItemName).sprite;
-				sr.material = sr.material = Resources.Load("SpriteMaterial") as Material;
+				Item item = ItemDatabase.I.FindItem(drop.ItemName);
+				sr.sprite = (item != null) ? item.sprite : null;
+				sr.material = sr.material = Resources.Load("Materials/SpriteMaterial") as Material;
 
 				dropObject.AddComponent<PolygonCollider2D>();
 				dropObject.AddComponent<Rigidbody2D>();
@@ -157,7 +214,7 @@ public class WorldGen : Singleton<WorldGen> {
 			}
 		}
 
-		chunk.blocks[x, y] = blockManager.FindBlock(0);
+		chunk.blocks[x, y] = BlockManager.I.FindBlock(0);
 
 		GameObject.Destroy(block);
 	}
@@ -210,10 +267,35 @@ public class WorldGen : Singleton<WorldGen> {
 		return new Vector2(xPos, yPos);
 	}
 
-	private GameObject SpawnPlayer(float x, float y)
+	public void SpawnPlayer(float x, float y, int direction)
 	{
-		GameObject playerObj = GameObject.Instantiate(player, new Vector3(x, y), Quaternion.identity) as GameObject;
-		return playerObj;
+		player = GameObject.Instantiate(playerPrefab, new Vector3(x, y), Quaternion.identity) as GameObject;
+		player.GetComponent<Player>().direction = direction;
 	}
 
+	public List<cChunk> SerializableChunks(List<Chunk> chunks)
+	{
+		List<cChunk> chnks = new List<cChunk>();
+		foreach (Chunk chunk in chunks)
+		{
+			cChunk chnk = chunk.Serializable();
+			chnk.blocks = SerializableBlocks(chunk.blocks);
+
+			chnks.Add(chnk);
+		}
+		return chnks;
+	}
+
+	public cBlock[,] SerializableBlocks(Block[,] blocks)
+	{
+		cBlock[,] blcks = new cBlock[Chunk.size, height];
+		for (int x = 0; x < Chunk.size; x++)
+		{			
+			for (int y = 0; y < height; y++)
+			{
+				if (blocks[x, y] != null) blcks[x, y] = blocks[x, y].Serializable(); else blcks[x, y] = null;
+			}
+		}
+		return blcks;
+	}
 }
