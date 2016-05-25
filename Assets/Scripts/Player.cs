@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class Player : MonoBehaviour {
 
@@ -109,7 +110,7 @@ public class Player : MonoBehaviour {
 
 	private void UpdateBreaking()
 	{
-		if(Input.GetMouseButtonDown(0))
+		if(Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
@@ -128,7 +129,7 @@ public class Player : MonoBehaviour {
 
 	private void UpdatePlacing()
 	{
-		if (Input.GetMouseButtonDown(1)) // RIGHT MOUSE
+		if (Input.GetMouseButtonDown(1) && !EventSystem.current.IsPointerOverGameObject()) // RIGHT MOUSE
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);

@@ -11,33 +11,34 @@ public class SaveLoadManager : Singleton<SaveLoadManager> {
 
 	public void CreateSaveGame()
 	{
-		SaveChunks();
+		SaveChunks(string.Format("{0}/{1}/{1}.world", Application.persistentDataPath, GlobalManager.I.savegame));
 		SavePlayer();
 	}
 
 	public void LoadSaveGame()
 	{
-		LoadChunks();
+		if (!System.IO.Directory.Exists(Application.persistentDataPath + "/" + GlobalManager.I.savegame)) return;
+
+		LoadChunks(string.Format("{0}/{1}/{1}.world", Application.persistentDataPath, GlobalManager.I.savegame));
 		LoadPlayer();
 	}
 
-	public void SaveChunks()
+	public void SaveChunks(string sFile)
 	{
-		//savedWorlds.Add(WorldManager.I.currentWorld);
 		cWorld world = new cWorld(WorldManager.I.SerializableChunks(WorldManager.I.chunks));
 
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + "/test.world");
+		FileStream file = File.Create(sFile);
 		bf.Serialize(file, world);
 		file.Close();
 	}
 
-	public void LoadChunks()
+	public void LoadChunks(string sFile)
 	{
-		if (File.Exists(Application.persistentDataPath + "/test.world"))
+		if (File.Exists(sFile))
 		{
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(Application.persistentDataPath + "/test.world", FileMode.Open);
+			FileStream file = File.Open(sFile, FileMode.Open);
 
 			cWorld world = (cWorld)bf.Deserialize(file);
 			file.Close();
