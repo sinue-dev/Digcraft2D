@@ -20,7 +20,7 @@ public class GUIManager : Singleton<GUIManager>
 
 	public Image[] slots;
 
-	public Image greyOut;
+	//public Image greyOut;
 
 	private void Start()
 	{
@@ -131,7 +131,7 @@ public class GUIManager : Singleton<GUIManager>
 
 	public void ShowPlayerInventory(bool value)
 	{
-		greyOut.color = value ? new Color(0, 0, 0, 0.75f) : new Color(0, 0, 0, 0);
+		//greyOut.color = value ? new Color(0, 0, 0, 0.75f) : new Color(0, 0, 0, 0);
 
 		playerInventory.gameObject.SetActive(value);
 		bShowPlayerInventory = value;

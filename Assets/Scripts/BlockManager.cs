@@ -7,7 +7,7 @@ public class BlockManager : Singleton<BlockManager> {
 	private List<Block> blocks = new List<Block>();
 	public Dictionary<string, Sprite> dictSprites = new Dictionary<string, Sprite>();
 
-	private void Start()
+	private void Awake()
 	{
 		LoadSpriteDict();
 

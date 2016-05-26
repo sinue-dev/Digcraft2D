@@ -8,7 +8,7 @@ public class ItemDatabase : Singleton<ItemDatabase> {
 	private List<Item> items = new List<Item>();
 	public Dictionary<string, Sprite> dictSprites = new Dictionary<string, Sprite>();
 
-	private void Start()
+	private void Awake()
 	{
 		LoadSpriteDict();
 
