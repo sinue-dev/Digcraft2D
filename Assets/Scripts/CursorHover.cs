@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class CursorHover : MonoBehaviour {
 
@@ -16,10 +17,8 @@ public class CursorHover : MonoBehaviour {
 		{
 			Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Vector2 pos = WorldManager.I.WorldPosToGridPos(worldPos.x, worldPos.y);
-			if (cursorHover.transform.position.x != pos.x || cursorHover.transform.position.y != pos.y)
+			if ((cursorHover.transform.position.x != pos.x || cursorHover.transform.position.y != pos.y) && !EventSystem.current.IsPointerOverGameObject())
 			{
-				//Vector2 pos = worldGen.WorldPosToChunkPos(Input.mousePosition.x, Input.mousePosition.y);
-
 				cursorHover.transform.position = pos;
 			}
 		}

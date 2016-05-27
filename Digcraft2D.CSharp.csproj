@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\Item.cs" />
     <Compile Include="Assets\Scripts\ItemDatabase.cs" />
+    <Compile Include="Assets\Scripts\ItemInfo.cs" />
     <Compile Include="Assets\Scripts\Magnetism.cs" />
     <Compile Include="Assets\Scripts\MainMenuCam.cs" />
     <Compile Include="Assets\Scripts\MenuManager.cs" />

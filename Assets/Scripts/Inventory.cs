@@ -6,18 +6,15 @@ public class Inventory : MonoBehaviour {
     public int slotCount = 3 * 9;
     public ItemStack[] itemStacks;
 
-    private ItemDatabase itemDatabase;
-
     private void Start()
     {
-		itemDatabase = ItemDatabase.I;
         itemStacks = new ItemStack[slotCount];
-        itemStacks[4] = new ItemStack(itemDatabase.FindItem("Dirt"), 64);
+        itemStacks[4] = new ItemStack(ItemDatabase.I.FindItem(ItemDatabase.ItemID_e.DIRT).itemData, 64);
     }
 
-    public void AddItem(string sName, int iCount)
+    public void AddItem(ItemDatabase.ItemID_e id, int iCount)
     {
-        ItemStack existingStack = FindExistingStack(sName, iCount);
+        ItemStack existingStack = FindExistingStackToAdd(id, iCount);
 
         if(existingStack != null)
         {
@@ -28,7 +25,7 @@ public class Inventory : MonoBehaviour {
             if(FindFirstAvailableSlot() >= 0)
             {
                 int availableSlot = FindFirstAvailableSlot();
-                itemStacks[availableSlot] = new ItemStack(itemDatabase.FindItem(name), iCount);
+                itemStacks[availableSlot] = new ItemStack(ItemDatabase.I.FindItem(id).itemData, iCount);
                 //itemStacks.Add(, iCount));
             }
             else
@@ -38,9 +35,9 @@ public class Inventory : MonoBehaviour {
         }
     }
 
-    public void RemoveItem(string sName, int iCount)
+    public void RemoveItem(ItemDatabase.ItemID_e id, int iCount)
     {
-        ItemStack existingStack = FindExistingStack(sName, iCount);
+        ItemStack existingStack = FindExistingStack(id, iCount);
 
         if (existingStack != null)
         {
@@ -55,11 +52,11 @@ public class Inventory : MonoBehaviour {
         }
     }
 
-    private ItemStack FindExistingStack(string sName)
+    private ItemStack FindExistingStack(ItemDatabase.ItemID_e id)
     {
         foreach(ItemStack i in itemStacks)
         {
-            if(i.item.itemName == name)
+            if(i.itemData.itemID == id)
             {
                 return i;
             }
@@ -73,25 +70,43 @@ public class Inventory : MonoBehaviour {
         {
             if(itemStacks[i] == null)
             {
-                return i;
+				return i;
             }
         }
         return -1;
     }
 
-    private ItemStack FindExistingStack(string sName, int iCount)
+    private ItemStack FindExistingStackToAdd(ItemDatabase.ItemID_e id, int iCount)
     {
         foreach (ItemStack i in itemStacks)
         {
-            if (i.item.itemName == name)
-            {
-                if(i.stackSize + iCount <= i.item.iMaxStack)
-                {
-                    return i;
-                }
-            }
+			if (i != null)
+			{
+				if (i.itemData.itemID == id)
+				{
+					if (i.stackSize + iCount <= i.itemData.iMaxStack)
+					{
+						return i;
+					}
+				}
+			}
         }
         return null;
     }
+
+	private ItemStack FindExistingStack(ItemDatabase.ItemID_e id, int iCount)
+	{
+		foreach (ItemStack i in itemStacks)
+		{
+			if (i != null)
+			{
+				if (i.itemData.itemID == id)
+				{
+					return i;
+				}
+			}
+		}
+		return null;
+	}
 
 }

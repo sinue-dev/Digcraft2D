@@ -5,9 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GUIManager : Singleton<GUIManager>
 {
-	public Image playerInventory;
-
-	private Inventory playerInventoryScript;
+	public GameObject playerInventory;
+	public Inventory scrPlayerInventory;
 
 	public GameObject slotPrefab;
 
@@ -32,9 +31,9 @@ public class GUIManager : Singleton<GUIManager>
 
 	private void Update()
 	{
-		if (playerInventoryScript == null)
+		if (scrPlayerInventory == null)
 		{
-			playerInventoryScript = GameObject.FindWithTag("Player").GetComponent<Inventory>();
+			scrPlayerInventory = WorldManager.I.player.GetComponent<Inventory>();
 		}
 
 		RenderCursorStack();
@@ -49,10 +48,10 @@ public class GUIManager : Singleton<GUIManager>
 					{
 						if (cursorStack == null)
 						{
-							if (playerInventoryScript.itemStacks[i] != null)
+							if (scrPlayerInventory.itemStacks[i] != null)
 							{
-								cursorStack = playerInventoryScript.itemStacks[i];
-								playerInventoryScript.itemStacks[i] = null;
+								cursorStack = scrPlayerInventory.itemStacks[i];
+								scrPlayerInventory.itemStacks[i] = null;
 							}
 							else
 							{
@@ -71,7 +70,7 @@ public class GUIManager : Singleton<GUIManager>
 					{
 						if (cursorStack != null)
 						{
-							playerInventoryScript.itemStacks[i] = cursorStack;
+							scrPlayerInventory.itemStacks[i] = cursorStack;
 							cursorStack = null;
 						}
 					}
@@ -86,12 +85,12 @@ public class GUIManager : Singleton<GUIManager>
 	{
 		for (int i = 0; i < slots.Length; i++)
 		{
-			ItemStack itemStack = playerInventoryScript.itemStacks[i];
+			ItemStack itemStack = scrPlayerInventory.itemStacks[i];
 
 			if (itemStack != null)
 			{
 				slots[i].color = new Color(1, 1, 1, 1);
-				slots[i].sprite = itemStack.item.sprite;
+				slots[i].sprite = ItemDatabase.I.FindItem(itemStack.itemData.itemID).sprite;
 
 				slots[i].transform.GetChild(0).GetComponent<Text>().text = itemStack.stackSize.ToString();
 			}
@@ -114,7 +113,7 @@ public class GUIManager : Singleton<GUIManager>
 			if (cursorIcon.GetComponent<Image>().color.a != 1)
 			{
 				cursorIcon.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-				cursorIcon.GetComponent<Image>().sprite = cursorStack.item.sprite;
+				cursorIcon.GetComponent<Image>().sprite = ItemDatabase.I.FindItem(cursorStack.itemData.itemID).sprite;
 				cursorIcon.transform.GetChild(0).GetComponent<Text>().text = cursorStack.stackSize.ToString();
 			}
 		}
@@ -133,7 +132,7 @@ public class GUIManager : Singleton<GUIManager>
 	{
 		//greyOut.color = value ? new Color(0, 0, 0, 0.75f) : new Color(0, 0, 0, 0);
 
-		playerInventory.gameObject.SetActive(value);
+		playerInventory.SetActive(value);
 		bShowPlayerInventory = value;
 	}
 

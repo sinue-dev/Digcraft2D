@@ -53,7 +53,7 @@ public class Hotbar : MonoBehaviour {
 
 			if(invSlot != null)
 			{
-				hotbarSlot.sprite = invSlot.item.sprite;
+				hotbarSlot.sprite = ItemDatabase.I.FindItem(invSlot.itemData.itemID).sprite;
 				hotbarSlot.color = new Color(1, 1, 1, 1);
 				hotbarSlot.transform.FindChild("SlotText").GetComponent<Text>().text = invSlot.stackSize.ToString();
 			}
@@ -72,7 +72,7 @@ public class Hotbar : MonoBehaviour {
 
 		if(playerInv.itemStacks[selSlot +26] != null)
 		{
-			return playerInv.itemStacks[selSlot + 26].item;
+			return ItemDatabase.I.FindItem(playerInv.itemStacks[selSlot + 26].itemData.itemID);
 		}
 		return null;
 	}

@@ -139,10 +139,12 @@ public class Player : MonoBehaviour {
 
 				if (item == null) return;
 
-				if(item.type == Item.ItemType_e.BLOCK)
+				if(item.itemData.type == cItemData.ItemType_e.BLOCK)
 				{
-					Block block = BlockManager.I.FindBlock(item.itemName);
+					Block block = BlockManager.I.FindBlock(item.itemData.blockID);
 					WorldManager.I.PlaceBlock(block, ray.origin);
+
+					GUIManager.I.scrPlayerInventory.RemoveItem(item.itemData.itemID, 1);
 				}
 			}
 		}

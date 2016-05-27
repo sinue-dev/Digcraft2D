@@ -45,25 +45,25 @@ public class Chunk {
 					{
 						if (Random.value < 0.1)
 						{
-							blocks[x, y] = BlockManager.I.FindBlock(4);
+							blocks[x, y] = BlockManager.I.FindBlock(BlockManager.BlockID_e.GRASS4);
 						}
 					}
 					else if (y == pHeight - 1) // Grass Layer
 					{
-						blocks[x, y] = BlockManager.I.FindBlock(1);
+						blocks[x, y] = BlockManager.I.FindBlock(BlockManager.BlockID_e.DIRT_GRASS);
 					}
 					else if (y == pHeight - 2 || y == pHeight - 3 || y == pHeight - 4) // Dirt Layers
 					{
-						blocks[x, y] = BlockManager.I.FindBlock(3);
+						blocks[x, y] = BlockManager.I.FindBlock(BlockManager.BlockID_e.DIRT);
 					}
 					else // Stone Layers
 					{
-						blocks[x, y] = BlockManager.I.FindBlock(2);
+						blocks[x, y] = BlockManager.I.FindBlock(BlockManager.BlockID_e.STONE);
 					}
 				}
 				else
 				{
-					blocks[x, y] = BlockManager.I.FindBlock(0);
+					blocks[x, y] = BlockManager.I.FindBlock(BlockManager.BlockID_e.AIR);
 				}
 			}
 		}

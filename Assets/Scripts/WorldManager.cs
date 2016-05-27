@@ -32,6 +32,8 @@ public class WorldManager : Singleton<WorldManager> {
 			bool spawn = true;
 			foreach (Chunk chunk in chunks)
 			{
+				if (chunk == null) continue;
+
 				if (chunk.position == i)
 				{
 					if (chunk.chunkState == Chunk.ChunkState_e.DESPAWNED)
@@ -124,6 +126,11 @@ public class WorldManager : Singleton<WorldManager> {
 					{
 						BoxCollider2D bc = goBlock.AddComponent<BoxCollider2D>();
 					}
+					else
+					{
+						BoxCollider2D bc = goBlock.AddComponent<BoxCollider2D>();
+						bc.isTrigger = true;
+					}
 				}
 			}
 		}
@@ -172,6 +179,11 @@ public class WorldManager : Singleton<WorldManager> {
 					{
 						BoxCollider2D bc = goBlock.AddComponent<BoxCollider2D>();
 					}
+					else
+					{
+						BoxCollider2D bc = goBlock.AddComponent<BoxCollider2D>();
+						bc.isTrigger = true;
+					}
 				}
 				else if(chunk.blocks[x, y] == null && chunk.blockObjects[x, y] != null)
 				{
@@ -201,7 +213,7 @@ public class WorldManager : Singleton<WorldManager> {
 				dropObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
 				SpriteRenderer sr = dropObject.AddComponent<SpriteRenderer>();
-				Item item = ItemDatabase.I.FindItem(drop.ItemName);
+				Item item = ItemDatabase.I.FindItem(drop.id);
 				sr.sprite = (item != null) ? item.sprite : null;
 				sr.material = sr.material = Resources.Load("Materials/SpriteMaterial") as Material;
 
@@ -210,11 +222,13 @@ public class WorldManager : Singleton<WorldManager> {
 				dropObject.layer = 9;
 
 				dropObject.AddComponent<Magnetism>().target = GameObject.FindWithTag("Player").transform;
-				dropObject.name = drop.ItemName;
+				dropObject.name = ItemDatabase.I.FindItem(drop.id).itemData.sItemName;
+				dropObject.AddComponent<ItemInfo>().item = ItemDatabase.I.FindItem(drop.id);
+				
 			}
 		}
 
-		chunk.blocks[x, y] = BlockManager.I.FindBlock(0);
+		chunk.blocks[x, y] = BlockManager.I.FindBlock(BlockManager.BlockID_e.AIR);
 
 		GameObject.Destroy(block);
 	}
