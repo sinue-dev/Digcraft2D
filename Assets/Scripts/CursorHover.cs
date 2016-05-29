@@ -19,7 +19,11 @@ public class CursorHover : MonoBehaviour {
 			Vector2 pos = WorldManager.I.WorldPosToGridPos(worldPos.x, worldPos.y);
 			if ((cursorHover.transform.position.x != pos.x || cursorHover.transform.position.y != pos.y) && !EventSystem.current.IsPointerOverGameObject())
 			{
-				cursorHover.transform.position = pos;
+                int distance = WorldManager.I.GetBlockDistance(pos, WorldManager.I.player.transform.position);
+                if (distance <= WorldManager.I.player.GetComponent<Player>().blockRange)
+                {
+                    cursorHover.transform.position = pos;
+                }
 			}
 		}
 	}

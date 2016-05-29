@@ -55,12 +55,12 @@ public class BlockManager : Singleton<BlockManager> {
 		AddBlockToDatabase("StoneGrass", BlockID_e.STONE, dictSprites["stone_dirt"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.GRAVEL_STONE, 1) }); // gravel_stone
 		AddBlockToDatabase("StoneSand", BlockID_e.STONE, dictSprites["stone_sand"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.GRAVEL_STONE, 1) }); // gravel_stone
 		AddBlockToDatabase("StoneSnow", BlockID_e.STONE, dictSprites["stone_snow"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.GRAVEL_STONE, 1) }); // gravel_stone
-		AddBlockToDatabase("StoneCoal", BlockID_e.STONE_COAL, dictSprites["stone_coal"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.ORE_COAL, 1) });
-		AddBlockToDatabase("StoneCopper", BlockID_e.STONE_COPPER, dictSprites["stone_copper"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.ORE_COPPER, 1) });
-		AddBlockToDatabase("StoneIron", BlockID_e.STONE_IRON, dictSprites["stone_iron"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.ORE_IRON, 1) });
-		AddBlockToDatabase("StoneSilver", BlockID_e.STONE_SILVER, dictSprites["stone_silver"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.ORE_SILVER, 1) });
-		AddBlockToDatabase("StoneGold", BlockID_e.STONE_GOLD, dictSprites["stone_gold"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.ORE_GOLD, 1) });
-		AddBlockToDatabase("StoneDiamond", BlockID_e.STONE_DIAMOND, dictSprites["stone_diamond"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.ORE_DIAMOND, 1) });
+		AddBlockToDatabase("StoneCoal", BlockID_e.STONE_COAL, dictSprites["stone_coal"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.COAL, 1) });
+		AddBlockToDatabase("StoneCopper", BlockID_e.STONE_COPPER, dictSprites["stone_copper"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.COPPER, 1) });
+		AddBlockToDatabase("StoneIron", BlockID_e.STONE_IRON, dictSprites["stone_iron"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.IRON, 1) });
+		AddBlockToDatabase("StoneSilver", BlockID_e.STONE_SILVER, dictSprites["stone_silver"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.SILVER, 1) });
+		AddBlockToDatabase("StoneGold", BlockID_e.STONE_GOLD, dictSprites["stone_gold"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.GOLD, 1) });
+		AddBlockToDatabase("StoneDiamond", BlockID_e.STONE_DIAMOND, dictSprites["stone_diamond"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.DIAMOND, 1) });
 		AddBlockToDatabase("Water", BlockID_e.WATER, dictSprites["water"], false, new Drop[0]);
 		AddBlockToDatabase("Trunk", BlockID_e.TRUNK_SIDE, dictSprites["trunk_side"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.TRUNK_SIDE, 1) });
 		AddBlockToDatabase("TrunkWhite", BlockID_e.TRUNK_WHITE_SIDE, dictSprites["trunk_white_side"], true, new Drop[1] { new Drop(ItemDatabase.ItemID_e.TRUNK_WHITE_SIDE, 1) });

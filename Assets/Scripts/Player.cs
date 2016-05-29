@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
 	public KeyCode leftKey, rightKey, jumpKey;
 	public float moveSpeed = 3f;
 	public float jumpForce = 250f;
+    public int blockRange = 3;
 
 	public LayerMask groundLayer;
 	public float groundCheckDistance = 0.07f;
@@ -121,7 +122,11 @@ public class Player : MonoBehaviour {
 				Debug.Log("HIT: " + hit.collider.gameObject.name);
 				if(hit.collider.gameObject.tag == "Block")
 				{
-					WorldManager.I.DestroyBlock(hit.collider.gameObject);
+                    int distance = WorldManager.I.GetBlockDistance(hit.collider.transform.position, WorldManager.I.player.transform.position);
+                    if(distance <= blockRange)
+                    {
+                        WorldManager.I.DestroyBlock(hit.collider.gameObject);
+                    }					
 				}
 			}
 		}
@@ -135,17 +140,21 @@ public class Player : MonoBehaviour {
 			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 			if (hit.collider == null)
 			{
-				Item item = GUIManager.I.hotbar.GetHeldItem();
+                int distance = WorldManager.I.GetBlockDistance(hit.collider.transform.position, WorldManager.I.player.transform.position);
+                if (distance <= blockRange)
+                {
+                    Item item = GUIManager.I.hotbar.GetHeldItem();
 
-				if (item == null) return;
+                    if (item == null) return;
 
-				if(item.itemData.type == cItemData.ItemType_e.BLOCK)
-				{
-					Block block = BlockManager.I.FindBlock(item.itemData.blockID);
-					WorldManager.I.PlaceBlock(block, ray.origin);
+                    if (item.itemData.type == cItemData.ItemType_e.BLOCK)
+                    {
+                        Block block = BlockManager.I.FindBlock(item.itemData.blockID);
+                        WorldManager.I.PlaceBlock(block, ray.origin);
 
-					GUIManager.I.scrPlayerInventory.RemoveItem(item.itemData.itemID, 1);
-				}
+                        GUIManager.I.scrPlayerInventory.RemoveItem(item.itemData.itemID, 1);
+                    }
+                }
 			}
 		}
 	}

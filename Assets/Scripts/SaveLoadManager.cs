@@ -15,12 +15,14 @@ public class SaveLoadManager : Singleton<SaveLoadManager> {
 		SavePlayer();
 	}
 
-	public void LoadSaveGame()
+	public bool LoadSaveGame()
 	{
-		if (!System.IO.Directory.Exists(Application.persistentDataPath + "/" + GlobalManager.I.savegame)) return;
+		if (!System.IO.Directory.Exists(Application.persistentDataPath + "/" + GlobalManager.I.savegame)) return false;
 
 		LoadChunks(string.Format("{0}/{1}/{1}.world", Application.persistentDataPath, GlobalManager.I.savegame));
 		LoadPlayer();
+
+        return true;
 	}
 
 	public void SaveChunks(string sFile)

@@ -16,7 +16,10 @@ public class WorldManager : Singleton<WorldManager> {
 	{
 		chunks = new List<Chunk>();
 
-		SaveLoadManager.I.LoadSaveGame();
+		if(!SaveLoadManager.I.LoadSaveGame())
+        {
+            WorldManager.I.SpawnPlayer(7, 100, 0);
+        }
 		//SpawnPlayer(7, 65, 0);
 	}
 
@@ -238,9 +241,12 @@ public class WorldManager : Singleton<WorldManager> {
 		Chunk chunk = ChunkAtPos(pos.x);
 		Vector2 chunkPos = WorldPosToChunkPos(pos.x, pos.y);
 
-		chunk.blocks[(int)chunkPos.x, (int)chunkPos.y] = block;
+        if(chunkPos.x <= chunk.blocks.GetLength(0) && chunkPos.y <= chunk.blocks.GetLength(1))
+        {
+            chunk.blocks[(int)chunkPos.x, (int)chunkPos.y] = block;
 
-		UpdateChunk(chunk);
+            UpdateChunk(chunk);
+        }
 	}
 
 	private Chunk ChunkAtPos(float x)
@@ -257,7 +263,13 @@ public class WorldManager : Singleton<WorldManager> {
 		return null;
 	}
 
-	public Vector2 WorldPosToChunkPos(float x, float y)
+    public int GetBlockDistance(Vector3 targetPos, Vector3 pos)
+    {
+        return Mathf.RoundToInt(Vector3.Distance(pos, targetPos));
+    }
+
+
+    public Vector2 WorldPosToChunkPos(float x, float y)
 	{
 		int xPos = Mathf.RoundToInt(x - (ChunkAtPos(x).position * Chunk.size));
 		int yPos = Mathf.RoundToInt(y);

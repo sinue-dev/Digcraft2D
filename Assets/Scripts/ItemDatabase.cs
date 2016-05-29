@@ -38,15 +38,21 @@ public class ItemDatabase : Singleton<ItemDatabase> {
 		//GRASS4 = 26
 
 		//### Items
-		ORE_COAL = 100,
-		ORE_COPPER = 101,
-		ORE_IRON = 102,
-		ORE_SILVER = 103,
-		ORE_GOLD = 104,
-		ORE_DIAMOND = 105,
-		APPLE = 106,
-		SEED = 107,
-		WHEAT = 108
+		COAL = 100,
+        COPPER = 101,
+		IRON = 102,
+		SILVER = 103,
+		GOLD = 104,
+		DIAMOND = 105,
+        ORE_COAL = 106,
+        ORE_COPPER = 107,
+        ORE_IRON = 108,
+        ORE_SILVER = 109,
+        ORE_GOLD = 110,
+        ORE_DIAMOND = 111,
+		APPLE = 112,
+		SEED = 113,
+		WHEAT = 114
 	}
 
 	private void Awake()
@@ -57,7 +63,13 @@ public class ItemDatabase : Singleton<ItemDatabase> {
 		AddItemToDatabase("GravelDirt", ItemID_e.GRAVEL_DIRT, BlockManager.BlockID_e.GRAVEL_DIRT, BlockManager.I.dictSprites["gravel_dirt"], 64, cItemData.ItemType_e.BLOCK);
 		AddItemToDatabase("GravelStone", ItemID_e.GRAVEL_STONE, BlockManager.BlockID_e.GRAVEL_STONE, BlockManager.I.dictSprites["gravel_stone"], 64, cItemData.ItemType_e.BLOCK);
 		AddItemToDatabase("Seed", ItemID_e.SEED, BlockManager.BlockID_e.AIR, dictSprites["seed"], 64, cItemData.ItemType_e.FOOD);
-	}
+        AddItemToDatabase("Coal", ItemID_e.COAL, BlockManager.BlockID_e.AIR, dictSprites["ore_coal"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Iron", ItemID_e.IRON, BlockManager.BlockID_e.AIR, dictSprites["ore_iron"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Copper", ItemID_e.COPPER, BlockManager.BlockID_e.AIR, dictSprites["ore_copper"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Silver", ItemID_e.SILVER, BlockManager.BlockID_e.AIR, dictSprites["ore_silver"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Gold", ItemID_e.GOLD, BlockManager.BlockID_e.AIR, dictSprites["ore_gold"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Diamond", ItemID_e.DIAMOND, BlockManager.BlockID_e.AIR, dictSprites["ore_diamond"], 64, cItemData.ItemType_e.ITEM);
+    }
 
 	#region Item Functions
 	public void AddItemToDatabase(string ItemName, ItemID_e id, BlockManager.BlockID_e blockID, Sprite sprite, int MaxStackSize, cItemData.ItemType_e ItemType)
