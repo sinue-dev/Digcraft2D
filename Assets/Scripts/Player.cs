@@ -135,7 +135,7 @@ public class Player : MonoBehaviour {
 			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 			if (hit.collider == null)
 			{
-				Item item = GUIManager.I.hotbar.GetHeldItem();
+				Item item = GUIManager.I.scrHotbar.GetHeldItem();
 
 				if (item == null) return;
 
@@ -144,7 +144,7 @@ public class Player : MonoBehaviour {
 					Block block = BlockManager.I.FindBlock(item.itemData.blockID);
 					WorldManager.I.PlaceBlock(block, ray.origin);
 
-					GUIManager.I.scrPlayerInventory.RemoveItem(item.itemData.itemID, 1);
+					GUIManager.I.scrPlayerInventory.RemoveItem(item.itemData.itemID, 1, ref GUIManager.I.scrPlayerInventory.itemHotbarStacks);
 				}
 			}
 		}

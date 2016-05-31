@@ -5,15 +5,13 @@ using UnityEngine.UI;
 public class Hotbar : MonoBehaviour {
 
 	public int selectedSlot = 1;
-	public Image[] slots;
+	public Image[] hotbarSlots;
 	public Image selector;
-	private Inventory playerInv;
 
 	private void Update()
 	{
-		if(playerInv == null)
+		if(GUIManager.I.scrPlayerInventory == null)
 		{
-			playerInv = GameObject.FindWithTag("Player").GetComponent<Inventory>();
 			return;
 		}
 
@@ -39,40 +37,40 @@ public class Hotbar : MonoBehaviour {
 
 	private void UpdateSelector()
 	{
-		selector.rectTransform.localPosition = slots[selectedSlot - 1].rectTransform.localPosition;
+		selector.rectTransform.localPosition = GUIManager.I.invHotbarSlots[selectedSlot - 1].rectTransform.localPosition;
 
-		playerInv.gameObject.GetComponent<Player>().HoldItem(slots[selectedSlot - 1].sprite);
+		GUIManager.I.scrPlayerInventory.gameObject.GetComponent<Player>().HoldItem(GUIManager.I.invHotbarSlots[selectedSlot - 1].sprite);
 	}
 
 	private void UpdateItems()
 	{
-		for(int i = 0; i < 9; i++)
+		for(int i = 0; i < GUIManager.I.invHotbarSlots.Length; i++)
 		{
-			Image hotbarSlot = slots[8 - i];
-			ItemStack invSlot = (playerInv != null) ? playerInv.itemStacks[i + 27] : null;
+			Image hotbarSlot = hotbarSlots[i];
+			ItemStack invSlot = (GUIManager.I.scrPlayerInventory != null) ? GUIManager.I.scrPlayerInventory.itemHotbarStacks[i] : null;
 
 			if(invSlot != null)
 			{
-				hotbarSlot.sprite = ItemDatabase.I.FindItem(invSlot.itemData.itemID).sprite;
 				hotbarSlot.color = new Color(1, 1, 1, 1);
-				hotbarSlot.transform.FindChild("SlotText").GetComponent<Text>().text = invSlot.stackSize.ToString();
+				hotbarSlot.sprite = ItemDatabase.I.FindItem(invSlot.itemData.itemID).sprite;
+				hotbarSlot.transform.GetChild(0).GetComponent<Text>().text = invSlot.stackSize.ToString();
 			}
 			else
 			{
-				hotbarSlot.sprite = null;
 				hotbarSlot.color = new Color(1, 1, 1, 0);
-				hotbarSlot.transform.FindChild("SlotText").GetComponent<Text>().text = "";
+				hotbarSlot.sprite = null;
+				hotbarSlot.transform.GetChild(0).GetComponent<Text>().text = "";
 			}
 		}
 	}
 
 	public Item GetHeldItem()
 	{
-		int selSlot = 10 - selectedSlot;
+		int selSlot = selectedSlot -1;
 
-		if(playerInv.itemStacks[selSlot +26] != null)
+		if(GUIManager.I.scrPlayerInventory.itemHotbarStacks[selSlot] != null)
 		{
-			return ItemDatabase.I.FindItem(playerInv.itemStacks[selSlot + 26].itemData.itemID);
+			return ItemDatabase.I.FindItem(GUIManager.I.scrPlayerInventory.itemHotbarStacks[selSlot].itemData.itemID);
 		}
 		return null;
 	}

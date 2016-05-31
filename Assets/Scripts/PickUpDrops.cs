@@ -17,7 +17,7 @@ public class PickUpDrops : MonoBehaviour {
 			ItemInfo itemInfo = other.gameObject.GetComponent<ItemInfo>();
 			if (itemInfo != null)
 			{
-				connectedInv.AddItem(itemInfo.item.itemData.itemID, 1);				
+				connectedInv.AddItem(itemInfo.item.itemData.itemID, 1, ref GUIManager.I.scrPlayerInventory.itemInventoryStacks);				
 			}
 			GameObject.Destroy(other.gameObject);
 		}
