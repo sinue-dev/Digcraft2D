@@ -20,6 +20,17 @@ public class ItemStack
 {
 	public cItemData itemData;
     public int stackSize;
+	public StackLocation_e stackLocation = StackLocation_e.INVENTORY;
+
+	public enum StackLocation_e
+	{
+		CURSOR,
+		INVENTORY,
+		HOTBAR,
+		EQUIPMENT,
+		CRAFTING,
+		CRAFTINGRESULT
+	}
 
     public ItemStack(cItemData itemData, int stackSize)
     {

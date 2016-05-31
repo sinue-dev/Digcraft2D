@@ -66,9 +66,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\BaseStats.cs" />
     <Compile Include="Assets\Scripts\Block.cs" />
     <Compile Include="Assets\Scripts\BlockManager.cs" />
     <Compile Include="Assets\Scripts\Chunk.cs" />
+    <Compile Include="Assets\Scripts\Collider2D Optimization\EdgeColliderOptimizer.cs" />
+    <Compile Include="Assets\Scripts\Collider2D Optimization\PolygonColliderOptimizer.cs" />
+    <Compile Include="Assets\Scripts\Collider2D Optimization\ShapeOptimizationHelper.cs" />
     <Compile Include="Assets\Scripts\CursorHover.cs" />
     <Compile Include="Assets\Scripts\DayNightController.cs" />
     <Compile Include="Assets\Scripts\Drop.cs" />
@@ -85,10 +89,12 @@
     <Compile Include="Assets\Scripts\PickUpDrops.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\SaveLoadManager.cs" />
+    <Compile Include="Assets\Scripts\ScreenGuard.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
     <Compile Include="Assets\Scripts\WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Scripts\Collider2D Optimization\readme.txt" />
     <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlurEffectConeTaps.shader" />
