@@ -171,6 +171,8 @@ public class ItemDatabase : Singleton<ItemDatabase> {
 		}
 		else
 		{
+            if (GUIManager.I.scrPlayerInventory.itemResultStack[0] == null || !bRecipeMatched) return;
+
 			CraftingRecipe matchedRecipe = FindCraftingRecipe(GUIManager.I.scrPlayerInventory.itemResultStack[0].itemData.itemID);
 			
 			// Monitor changes

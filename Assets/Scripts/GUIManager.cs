@@ -6,29 +6,29 @@ using UnityEngine.SceneManagement;
 public class GUIManager : Singleton<GUIManager>
 {
 	public GameObject playerInventory;
-	public GameObject invHotbar;
-	public GameObject invInventory;
-	public GameObject invEquipment;
+    public Inventory scrPlayerInventory;
+
+    public GameObject playerHotbar;
+    public Hotbar scrPlayerHotbar;
+
+    public GameObject invInventory;
+    public GameObject invHotbar;
+    public GameObject invEquipment;
 	public GameObject invCrafting;
 	public GameObject invCraftingResult;
 
-	public Inventory scrPlayerInventory;
+    public Image[] invInventorySlots;
+    public Image[] invHotbarSlots;
+    public Image[] invEquipmentSlots;
+    public Image[] invCraftingSlots;
+    public Image[] invCraftingResultSlots;
 
-	public GameObject slotPrefab;
+    public GameObject slotPrefab;
 
-	private ItemStack cursorStack;
-	private GameObject cursorIcon;
+    public bool bShowPlayerInventory = false;
 
-	public GameObject hotbar;
-	public Hotbar scrHotbar;
-
-	public bool bShowPlayerInventory = false;
-
-	public Image[] invInventorySlots;
-	public Image[] invHotbarSlots;
-	public Image[] invEquipmentSlots;
-	public Image[] invCraftingSlots;
-	public Image[] invCraftingResultSlots;
+    private ItemStack cursorStack;
+	private GameObject cursorIcon;	
 
 	private bool bIsShiftDown = false;
 	private bool bIsStrgDown = false;
@@ -48,15 +48,20 @@ public class GUIManager : Singleton<GUIManager>
 			scrPlayerInventory = WorldManager.I.player.GetComponent<Inventory>();
 		}
 
-		if(scrHotbar == null)
+		if(scrPlayerHotbar == null)
 		{
-			scrHotbar = hotbar.GetComponent<Hotbar>();
+			scrPlayerHotbar = playerHotbar.GetComponent<Hotbar>();
 		}
 
 		RenderCursorStack();
 
 		if (bShowPlayerInventory)
 		{
+            if(Input.GetKey(KeyCode.Escape))
+            {
+                ShowPlayerInventory(false);
+            }
+
 			#region Stack moving
 			if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftControl) && Input.GetMouseButtonDown(0))
 			{
@@ -73,7 +78,7 @@ public class GUIManager : Singleton<GUIManager>
 				UpdateStackMovingUp(invHotbarSlots, ref scrPlayerInventory.itemHotbarStacks, ItemStack.StackLocation_e.HOTBAR);
 				UpdateStackMovingUp(invEquipmentSlots, ref scrPlayerInventory.itemEquipmentStacks, ItemStack.StackLocation_e.EQUIPMENT);
 				UpdateStackMovingUp(invCraftingSlots, ref scrPlayerInventory.itemCraftingStacks, ItemStack.StackLocation_e.CRAFTING);
-				UpdateStackMovingUp(invCraftingResultSlots, ref scrPlayerInventory.itemResultStack, ItemStack.StackLocation_e.CRAFTINGRESULT);
+				//UpdateStackMovingUp(invCraftingResultSlots, ref scrPlayerInventory.itemResultStack, ItemStack.StackLocation_e.CRAFTINGRESULT);
 			}
 			#endregion
 
@@ -94,7 +99,7 @@ public class GUIManager : Singleton<GUIManager>
 				UpdateShiftStackSplittingUp(invHotbarSlots, ref scrPlayerInventory.itemHotbarStacks, ItemStack.StackLocation_e.HOTBAR);
 				UpdateShiftStackSplittingUp(invEquipmentSlots, ref scrPlayerInventory.itemEquipmentStacks, ItemStack.StackLocation_e.EQUIPMENT);
 				UpdateShiftStackSplittingUp(invCraftingSlots, ref scrPlayerInventory.itemCraftingStacks, ItemStack.StackLocation_e.CRAFTING);
-				UpdateShiftStackSplittingUp(invCraftingResultSlots, ref scrPlayerInventory.itemResultStack, ItemStack.StackLocation_e.CRAFTINGRESULT);
+				//UpdateShiftStackSplittingUp(invCraftingResultSlots, ref scrPlayerInventory.itemResultStack, ItemStack.StackLocation_e.CRAFTINGRESULT);
 				bIsShiftDown = false;
 			}
 			#endregion
@@ -116,7 +121,7 @@ public class GUIManager : Singleton<GUIManager>
 				UpdateStrgStackSplittingUp(invHotbarSlots, ref scrPlayerInventory.itemHotbarStacks, ItemStack.StackLocation_e.HOTBAR);
 				UpdateStrgStackSplittingUp(invEquipmentSlots, ref scrPlayerInventory.itemEquipmentStacks, ItemStack.StackLocation_e.EQUIPMENT);
 				UpdateStrgStackSplittingUp(invCraftingSlots, ref scrPlayerInventory.itemCraftingStacks, ItemStack.StackLocation_e.CRAFTING);
-				UpdateStrgStackSplittingUp(invCraftingResultSlots, ref scrPlayerInventory.itemResultStack, ItemStack.StackLocation_e.CRAFTINGRESULT);
+				//UpdateStrgStackSplittingUp(invCraftingResultSlots, ref scrPlayerInventory.itemResultStack, ItemStack.StackLocation_e.CRAFTINGRESULT);
 				bIsStrgDown = false;
 			}
 			#endregion
@@ -177,7 +182,10 @@ public class GUIManager : Singleton<GUIManager>
 			{
 				if (cursorStack != null)
 				{
-					cursorStack.stackLocation = stackLocation;
+                    if (stackLocation == ItemStack.StackLocation_e.EQUIPMENT && cursorStack.itemData.type != cItemData.ItemType_e.ARMOR) return;
+                    if (stackLocation == ItemStack.StackLocation_e.CRAFTINGRESULT) return;
+
+                    cursorStack.stackLocation = stackLocation;
 
 					if (itemStacks[i] != null)
 					{
@@ -268,7 +276,10 @@ public class GUIManager : Singleton<GUIManager>
 			{
 				if (cursorStack != null)
 				{
-					cursorStack.stackLocation = stackLocation;
+                    if (stackLocation == ItemStack.StackLocation_e.EQUIPMENT && cursorStack.itemData.type != cItemData.ItemType_e.ARMOR) return;
+                    if (stackLocation == ItemStack.StackLocation_e.CRAFTINGRESULT) return;
+
+                    cursorStack.stackLocation = stackLocation;
 
 					if (itemStacks[i] != null)
 					{
@@ -362,7 +373,10 @@ public class GUIManager : Singleton<GUIManager>
 			{
 				if (cursorStack != null)
 				{
-					cursorStack.stackLocation = stackLocation;
+                    if (stackLocation == ItemStack.StackLocation_e.EQUIPMENT && cursorStack.itemData.type != cItemData.ItemType_e.ARMOR) return;
+                    if (stackLocation == ItemStack.StackLocation_e.CRAFTINGRESULT) return;
+
+                    cursorStack.stackLocation = stackLocation;
 
 					if (itemStacks[i] == null)
 					{
@@ -495,20 +509,28 @@ public class GUIManager : Singleton<GUIManager>
 			{
 				if (arr[i] != null)
 				{
-					arr[i].color = new Color(1, 1, 1, 1);
-					arr[i].sprite = ItemDatabase.I.FindItem(itemStack.itemData.itemID).sprite;
+                    Image slotSockel = arr[i].transform.GetChild(0).GetComponent<Image>();
+                    if (slotSockel != null)
+                    {
+                        slotSockel.color = new Color(1, 1, 1, 1);
+                        slotSockel.sprite = ItemDatabase.I.FindItem(itemStack.itemData.itemID).sprite;
 
-					arr[i].transform.GetChild(0).GetComponent<Text>().text = itemStack.stackSize.ToString();
+                        arr[i].transform.GetChild(1).GetComponent<Text>().text = itemStack.stackSize.ToString();
+                    }
 				}
 			}
 			else
 			{
 				if (arr[i] != null)
 				{
-					arr[i].color = new Color(1, 1, 1, 0);
-					arr[i].sprite = null;
+                    Image slotSockel = arr[i].transform.GetChild(0).GetComponent<Image>();
+                    if (slotSockel != null)
+                    {
+                        slotSockel.color = new Color(1, 1, 1, 0);
+                        slotSockel.sprite = null;
 
-					arr[i].transform.GetChild(0).GetComponent<Text>().text = string.Empty;
+                        arr[i].transform.GetChild(1).GetComponent<Text>().text = string.Empty;
+                    }
 				}
 			}
 		}
@@ -516,24 +538,33 @@ public class GUIManager : Singleton<GUIManager>
 
 	private void RenderCursorStack()
 	{
-		if (cursorStack != null)
-		{
-			cursorIcon.transform.position = Input.mousePosition;
+        Image cursorSlot = cursorIcon.transform.GetChild(0).GetComponent<Image>();
+        Text cursorText = cursorIcon.transform.GetChild(1).GetComponent<Text>();
 
-			if (cursorIcon.GetComponent<Image>().color.a != 1)
+        cursorIcon.transform.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+
+        if (cursorStack != null)
+		{
+            Vector3 newPos = new Vector3(Input.mousePosition.x - 32, Input.mousePosition.y, Input.mousePosition.z);
+			cursorIcon.transform.position = newPos;            
+
+			if (cursorSlot.color.a != 1)
 			{
-				cursorIcon.GetComponent<Image>().color = new Color(1, 1, 1, 1);
-				cursorIcon.GetComponent<Image>().sprite = ItemDatabase.I.FindItem(cursorStack.itemData.itemID).sprite;
-				cursorIcon.transform.GetChild(0).GetComponent<Text>().text = cursorStack.stackSize.ToString();
+                
+                cursorSlot.color = new Color(1, 1, 1, 1);
+                cursorSlot.sprite = ItemDatabase.I.FindItem(cursorStack.itemData.itemID).sprite;
+                cursorText.text = cursorStack.stackSize.ToString();
 			}
 		}
 		else
 		{
-			if (cursorIcon.GetComponent<Image>().color.a != 0)
+            cursorIcon.transform.position = Vector3.zero;
+
+			if (cursorSlot.color.a != 0)
 			{
-				cursorIcon.GetComponent<Image>().color = new Color(1, 1, 1, 0);
-				cursorIcon.GetComponent<Image>().sprite = null;
-				cursorIcon.transform.GetChild(0).GetComponent<Text>().text = "";
+                cursorSlot.color = new Color(1, 1, 1, 0);
+                cursorSlot.sprite = null;
+                cursorText.text = "";
 			}
 		}
 	}

@@ -135,7 +135,7 @@ public class Player : MonoBehaviour {
 			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
 			if (hit.collider == null)
 			{
-				Item item = GUIManager.I.scrHotbar.GetHeldItem();
+				Item item = GUIManager.I.scrPlayerHotbar.GetHeldItem();
 
 				if (item == null) return;
 
