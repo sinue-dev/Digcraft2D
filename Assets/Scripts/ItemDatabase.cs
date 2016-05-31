@@ -45,19 +45,25 @@ public class ItemDatabase : Singleton<ItemDatabase> {
 		STICK_WHITE = 28,
 		GRASS4 = 29,
 
-		//### Items
-		ORE_COAL = 100,
-		ORE_COPPER = 101,
-		ORE_IRON = 102,
-		ORE_SILVER = 103,
-		ORE_GOLD = 104,
-		ORE_DIAMOND = 105,
-		APPLE = 106,
-		SEED = 107,
-		WHEAT = 108,
+        //### Items
+        COAL = 100,
+        COPPER = 101,
+        IRON = 102,
+        SILVER = 103,
+        GOLD = 104,
+        DIAMOND = 105,
+        ORE_COAL = 106,
+        ORE_COPPER = 107,
+        ORE_IRON = 108,
+        ORE_SILVER = 109,
+        ORE_GOLD = 110,
+        ORE_DIAMOND = 111,
+        APPLE = 112,
+        SEED = 113,
+        WHEAT = 114,
 
-		// Weapons and Armor
-		HAMMER_COPPER = 200,
+        // Weapons and Armor
+        HAMMER_COPPER = 200,
 		HAMMER_IRON = 201,
 		HAMMER_SILVER = 202,
 		HAMMER_GOLD = 203,
@@ -93,7 +99,7 @@ public class ItemDatabase : Singleton<ItemDatabase> {
 		SWORD_GOLD = 233,
 		SWORD_DIAMOND = 234,
 		BOW = 235,
-		ARROW = 236
+		ARROW = 236,
 	}
 
 	private void Awake()
@@ -108,7 +114,14 @@ public class ItemDatabase : Singleton<ItemDatabase> {
 		AddItemToDatabase("Stick", ItemID_e.STICK, BlockManager.BlockID_e.AIR, dictSprites["stick"], 64, cItemData.ItemType_e.ITEM);
 		AddItemToDatabase("ShovelCopper", ItemID_e.SHOVEL_COPPER, BlockManager.BlockID_e.AIR, dictSprites["shovel_copper"], 1, cItemData.ItemType_e.TOOL);
 
-		AddCraftingRecipeToDatabase(ItemID_e.SHOVEL_COPPER, new object[9] { null, ItemID_e.ORE_COPPER, null, null, ItemID_e.STICK, null, null, ItemID_e.STICK, null });
+        AddItemToDatabase("Coal", ItemID_e.COAL, BlockManager.BlockID_e.AIR, dictSprites["ore_coal"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Iron", ItemID_e.IRON, BlockManager.BlockID_e.AIR, dictSprites["ore_iron"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Copper", ItemID_e.COPPER, BlockManager.BlockID_e.AIR, dictSprites["ore_copper"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Silver", ItemID_e.SILVER, BlockManager.BlockID_e.AIR, dictSprites["ore_silver"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Gold", ItemID_e.GOLD, BlockManager.BlockID_e.AIR, dictSprites["ore_gold"], 64, cItemData.ItemType_e.ITEM);
+        AddItemToDatabase("Diamond", ItemID_e.DIAMOND, BlockManager.BlockID_e.AIR, dictSprites["ore_diamond"], 64, cItemData.ItemType_e.ITEM);
+
+        AddCraftingRecipeToDatabase(ItemID_e.SHOVEL_COPPER, new object[9] { null, ItemID_e.ORE_COPPER, null, null, ItemID_e.STICK, null, null, ItemID_e.STICK, null });
 		AddCraftingRecipeToDatabase(ItemID_e.SHOVEL_IRON, new object[9] { null, ItemID_e.ORE_IRON, null, null, ItemID_e.STICK, null, null, ItemID_e.STICK, null });
 		AddCraftingRecipeToDatabase(ItemID_e.SHOVEL_SILVER, new object[9] { null, ItemID_e.ORE_SILVER, null, null, ItemID_e.STICK, null, null, ItemID_e.STICK, null });
 		AddCraftingRecipeToDatabase(ItemID_e.SHOVEL_GOLD, new object[9] { null, ItemID_e.ORE_GOLD, null, null, ItemID_e.STICK, null, null, ItemID_e.STICK, null });

@@ -8,6 +8,7 @@ public class Block {
 	public byte id;
 	public Sprite sprite;
 	public bool isSolid = true;
+    public bool isDestroyable = true;
 	public Drop[] drops;
 
 	public Block() { }
@@ -18,6 +19,7 @@ public class Block {
 		this.id = block.id;
 		this.sprite = block.sprite;
 		this.isSolid = block.isSolid;
+        this.isDestroyable = block.isDestroyable;
 		this.drops = block.drops;
 	}
 

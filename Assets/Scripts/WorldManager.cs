@@ -204,33 +204,35 @@ public class WorldManager : Singleton<WorldManager> {
 
 		Chunk chunk = ChunkAtPos(blockPos.x);
 
-		foreach (Drop drop in chunk.blocks[x, y].drops)
-		{
-			if (drop.DropChanceSuccess())
-			{
-				GameObject dropObject = new GameObject();
-				dropObject.transform.position = block.transform.position;
-				dropObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        if (chunk.blocks[x, y].isDestroyable)
+        {
+            foreach (Drop drop in chunk.blocks[x, y].drops)
+            {
+                if (drop.DropChanceSuccess())
+                {
+                    GameObject dropObject = new GameObject();
+                    dropObject.transform.position = block.transform.position;
+                    dropObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
-				SpriteRenderer sr = dropObject.AddComponent<SpriteRenderer>();
-				Item item = ItemDatabase.I.FindItem(drop.id);
-				sr.sprite = (item != null) ? item.sprite : null;
-				sr.material = sr.material = Resources.Load("Materials/SpriteMaterial") as Material;
+                    SpriteRenderer sr = dropObject.AddComponent<SpriteRenderer>();
+                    Item item = ItemDatabase.I.FindItem(drop.id);
+                    sr.sprite = (item != null) ? item.sprite : null;
+                    sr.material = sr.material = Resources.Load("Materials/SpriteMaterial") as Material;
 
-				dropObject.AddComponent<PolygonCollider2D>();
-				dropObject.AddComponent<Rigidbody2D>();
-				dropObject.layer = 9;
+                    dropObject.AddComponent<PolygonCollider2D>();
+                    dropObject.AddComponent<Rigidbody2D>();
+                    dropObject.layer = 9;
 
-				dropObject.AddComponent<Magnetism>().target = GameObject.FindWithTag("Player").transform;
-				dropObject.name = ItemDatabase.I.FindItem(drop.id).itemData.sItemName;
-				dropObject.AddComponent<ItemInfo>().item = ItemDatabase.I.FindItem(drop.id);
-				
-			}
-		}
+                    dropObject.AddComponent<Magnetism>().target = GameObject.FindWithTag("Player").transform;
+                    dropObject.name = ItemDatabase.I.FindItem(drop.id).itemData.sItemName;
+                    dropObject.AddComponent<ItemInfo>().item = ItemDatabase.I.FindItem(drop.id);
+                }
+            }
 
-		chunk.blocks[x, y] = BlockManager.I.FindBlock(BlockManager.BlockID_e.AIR);
+            chunk.blocks[x, y] = BlockManager.I.FindBlock(BlockManager.BlockID_e.AIR);
 
-		GameObject.Destroy(block);
+            GameObject.Destroy(block);
+        }
 	}
 
 	public void PlaceBlock(Block block, Vector3 pos)
@@ -238,9 +240,12 @@ public class WorldManager : Singleton<WorldManager> {
 		Chunk chunk = ChunkAtPos(pos.x);
 		Vector2 chunkPos = WorldPosToChunkPos(pos.x, pos.y);
 
-		chunk.blocks[(int)chunkPos.x, (int)chunkPos.y] = block;
+        if (chunkPos.x <= chunk.blocks.GetLength(0) && chunkPos.y <= chunk.blocks.GetLength(1))
+        {
+            chunk.blocks[(int)chunkPos.x, (int)chunkPos.y] = block;
 
-		UpdateChunk(chunk);
+            UpdateChunk(chunk);
+        }
 	}
 
 	private Chunk ChunkAtPos(float x)
@@ -257,7 +262,12 @@ public class WorldManager : Singleton<WorldManager> {
 		return null;
 	}
 
-	public Vector2 WorldPosToChunkPos(float x, float y)
+    public int GetBlockDistance(Vector3 targetPos, Vector3 pos)
+    {
+        return Mathf.RoundToInt(Vector3.Distance(pos, targetPos));
+    }
+
+public Vector2 WorldPosToChunkPos(float x, float y)
 	{
 		int xPos = Mathf.RoundToInt(x - (ChunkAtPos(x).position * Chunk.size));
 		int yPos = Mathf.RoundToInt(y);
