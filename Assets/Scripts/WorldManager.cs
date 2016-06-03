@@ -9,6 +9,7 @@ public class WorldManager : Singleton<WorldManager> {
 
 	public GameObject playerPrefab; // Player Prefab
 	public GameObject player;
+	public bool bRandomSpawnCorrectPosition = false;
 
 	public List<Chunk> chunks;
 
@@ -17,7 +18,12 @@ public class WorldManager : Singleton<WorldManager> {
 		chunks = new List<Chunk>();
 
 		SaveLoadManager.I.LoadSaveGame();
-		//SpawnPlayer(7, 65, 0);
+
+		if (player == null)
+		{
+			WorldManager.I.SpawnPlayer(0, height, 0);
+			bRandomSpawnCorrectPosition = true;			
+		}
 	}
 
 	void Update()
@@ -61,6 +67,13 @@ public class WorldManager : Singleton<WorldManager> {
 			{
 				if(chunk.chunkState == Chunk.ChunkState_e.SPAWNED) DespawnBlocks(chunk);
 			}
+		}
+
+		if(bRandomSpawnCorrectPosition && ChunkAtPos(player.transform.position.x) != null)
+		{
+			Chunk pChunk = ChunkAtPos(player.transform.position.x);
+			player.transform.position = new Vector3(pChunk.GetOverworldHeight((int)player.transform.position.x), player.transform.position.y, player.transform.position.z);
+			bRandomSpawnCorrectPosition = false;
 		}
 	}
 

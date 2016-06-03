@@ -34,12 +34,11 @@ public class Chunk {
 	{
         for (int x = 0; x < size; x++)
         {
-            float pValue = Mathf.PerlinNoise((position * size + x) * 0.05f, 5 * 0.05f);
-            int pHeight = Mathf.RoundToInt(pValue * 16f + heightModifier);
+			int pHeight = GetOverworldHeight(x);
 
-            for (int y = 0; y < WorldManager.height; y++)
+			for (int y = 0; y < WorldManager.height; y++)
             {
-                if (y <= pHeight)
+				if (y <= pHeight)
                 {
                     if (y == pHeight) // Flowers
                     {
@@ -182,6 +181,13 @@ public class Chunk {
 			}
 		}
 		return i;
+	}
+
+	public int GetOverworldHeight(int x)
+	{
+		float pValue = Mathf.PerlinNoise((position * size + x) * 0.05f, 5 * 0.05f);
+		int pHeight = Mathf.RoundToInt(pValue * 16f + heightModifier);
+		return pHeight;
 	}
 
 	public cChunk Serializable()

@@ -75,10 +75,6 @@ public class SaveLoadManager : Singleton<SaveLoadManager> {
 			WorldManager.I.SpawnPlayer(player.PositionX, player.PositionY, player.direction);
 
 		}
-		else
-		{
-			WorldManager.I.SpawnPlayer(7, 65, 0);
-		}
 	}
 
 	[System.Serializable]
